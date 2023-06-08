@@ -1,7 +1,13 @@
 public class SkipListExperimentUtils {
     public static double measureLevels(double p, int x) {
-        throw new UnsupportedOperationException("Replace this by your implementation");
+        double sum = 0;
+        for (int i = 0; i < x; i++) {
+            IndexableSkipList skipList = new IndexableSkipList(p);
+            sum += skipList.generateHeight();
+        }
+        return sum / x;
     }
+
 
     /*
      * The experiment should be performed according to these steps:
@@ -28,6 +34,38 @@ public class SkipListExperimentUtils {
     }
 
     public static void main(String[] args) {
-        System.exit(1); // Remove this line.
+        System.out.println(measureLevels(0.33, 1));
+        System.out.println(measureLevels(0.33, 5));
+        System.out.println(measureLevels(0.33, 10));
+        System.out.println(measureLevels(0.33, 100));
+        System.out.println(measureLevels(0.33, 1000));
+        System.out.println(measureLevels(0.33, 10000));
+
+        System.out.println();
+
+        System.out.println(measureLevels(0.5, 1));
+        System.out.println(measureLevels(0.5, 5));
+        System.out.println(measureLevels(0.5, 10));
+        System.out.println(measureLevels(0.5, 100));
+        System.out.println(measureLevels(0.5, 1000));
+        System.out.println(measureLevels(0.5, 10000));
+
+        System.out.println();
+
+        System.out.println(measureLevels(0.75, 1));
+        System.out.println(measureLevels(0.75, 5));
+        System.out.println(measureLevels(0.75, 10));
+        System.out.println(measureLevels(0.75, 100));
+        System.out.println(measureLevels(0.75, 1000));
+        System.out.println(measureLevels(0.75, 10000));
+
+        System.out.println();
+
+        System.out.println(measureLevels(0.9, 1));
+        System.out.println(measureLevels(0.9, 5));
+        System.out.println(measureLevels(0.9, 10));
+        System.out.println(measureLevels(0.9, 100));
+        System.out.println(measureLevels(0.9, 1000));
+        System.out.println(measureLevels(0.9, 10000));
     }
 }
