@@ -1,3 +1,9 @@
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
+
 public class SkipListExperimentUtils {
     public static double measureLevels(double p, int x) {
         double sum = 0;
@@ -22,50 +28,88 @@ public class SkipListExperimentUtils {
      * 6. Return the DS and the difference between the times from 3 and 5.
      */
     public static Pair<AbstractSkipList, Double> measureInsertions(double p, int size) {
-        throw new UnsupportedOperationException("Replace this by your implementation");
+        IndexableSkipList skipList = new IndexableSkipList(p);
+        List<Integer> l = new LinkedList<Integer>();
+        for (int i = 0; i < size*2; i = i + 2) {
+            l.add(i);
+        }
+        Collections.shuffle(l);
+        double sum = 0;
+        for (Integer integer : l) {
+            double start = System.nanoTime();
+            skipList.insert(integer);
+            double end = System.nanoTime();
+            sum += end - start;
+        }
+        return new Pair<AbstractSkipList, Double>(skipList, sum / size);
     }
 
     public static double measureSearch(AbstractSkipList skipList, int size) {
-        throw new UnsupportedOperationException("Replace this by your implementation");
+        List<Integer> l = new LinkedList<Integer>();
+        for (int i = 0; i < size*2; i++) {
+            l.add(i);
+        }
+        Collections.shuffle(l);
+        double sum = 0;
+        for (Integer integer : l) {
+            double start = System.nanoTime();
+            skipList.search(integer);
+            double end = System.nanoTime();
+            sum += end - start;
+        }
+        return sum / (size*2);
+        
     }
 
     public static double measureDeletions(AbstractSkipList skipList, int size) {
-        throw new UnsupportedOperationException("Replace this by your implementation");
+        List<Integer> l = new LinkedList<Integer>();
+        for (int i = 0; i < size*2; i = i + 2) {
+            l.add(i);
+        }
+        Collections.shuffle(l);
+        double sum = 0;
+        for (Integer integer : l) {
+            double start = System.nanoTime();
+            skipList.delete(skipList.search(integer));
+            double end = System.nanoTime();
+            sum += end - start;
+        }
+        return sum / size;
     }
 
     public static void main(String[] args) {
-        System.out.println(measureLevels(0.33, 1));
-        System.out.println(measureLevels(0.33, 5));
-        System.out.println(measureLevels(0.33, 10));
-        System.out.println(measureLevels(0.33, 100));
-        System.out.println(measureLevels(0.33, 1000));
-        System.out.println(measureLevels(0.33, 10000));
 
-        System.out.println();
+        System.out.println("-------- Experiment 1 --------");
+        List<Double> p = new LinkedList<Double>();
+        p.add(0.33); p.add(0.5); p.add(0.75); p.add(0.9);
+        List<Integer> x = new LinkedList<Integer>();
+        x.add(1); x.add(5); x.add(10); x.add(100); x.add(1000); x.add(10000);
+        for (Double d : p) {
+            for (Integer i : x) {
+                System.out.println("p = " + d + " -- x = " + i + " -- levels = " + measureLevels(d, i));
+            }
+            System.out.println();
+        }
 
-        System.out.println(measureLevels(0.5, 1));
-        System.out.println(measureLevels(0.5, 5));
-        System.out.println(measureLevels(0.5, 10));
-        System.out.println(measureLevels(0.5, 100));
-        System.out.println(measureLevels(0.5, 1000));
-        System.out.println(measureLevels(0.5, 10000));
+        System.out.println("-------- Experiment 2 --------");
+        List<Integer> size = new LinkedList<Integer>();
+        size.add(1000); size.add(2500); size.add(5000); size.add(10000); size.add(15000); size.add(20000); size.add(50000);
+        System.out.println("Measurements for insertions:");
+        for (double d : p) {
+            for (Integer i : size) {
+                double insertionAvg = 0;
+                double searchAvg = 0;
+                double deletionAvg = 0;
+                for (int j = 0; j <= 30; j++) {
+                    Pair<AbstractSkipList, Double> InsertionEx = measureInsertions(d, i);
+                    insertionAvg += InsertionEx.second();
+                    searchAvg += measureSearch(InsertionEx.first(), i);
+                    deletionAvg += measureDeletions(InsertionEx.first(), i);
 
-        System.out.println();
-
-        System.out.println(measureLevels(0.75, 1));
-        System.out.println(measureLevels(0.75, 5));
-        System.out.println(measureLevels(0.75, 10));
-        System.out.println(measureLevels(0.75, 100));
-        System.out.println(measureLevels(0.75, 1000));
-        System.out.println(measureLevels(0.75, 10000));
-
-        System.out.println();
-
-        System.out.println(measureLevels(0.9, 1));
-        System.out.println(measureLevels(0.9, 5));
-        System.out.println(measureLevels(0.9, 10));
-        System.out.println(measureLevels(0.9, 100));
-        System.out.println(measureLevels(0.9, 1000));
-        System.out.println(measureLevels(0.9, 10000));
+                }
+                System.out.println("p = " + d + " -- size = " + i + " -- insertion = " + insertionAvg/30 + " -- search = " + searchAvg/30 + " -- deletion = " + deletionAvg/30);
+            }
+        }
+        
     }
 }
