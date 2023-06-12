@@ -32,10 +32,9 @@ public class ProbingHashTable<K, V> implements HashTable<K, V> {
     }
 
     public V search(K key) {
-        boolean keepSearch = true;
-        for (int i=getPlace(key); i<capacity && keepSearch; i++){
+        for (int i=getPlace(key); i<capacity; i++){
             if (this.arr[i] == null){
-                keepSearch = false;
+                return null;
             }
             else if (!this.arr[i].second() && this.arr[i].first().first() == key){
                 return arr[i].first().second();
@@ -48,23 +47,24 @@ public class ProbingHashTable<K, V> implements HashTable<K, V> {
         this.counter += 1;
         this.checkRehash();
         Pair<Pair<K,V>,Boolean> item = new Pair(new Pair(key, value), false);
-        boolean added = false;
-        for (int i=getPlace(key); i<capacity && !added; i++){
-            if (this.arr[i] == null || this.arr[i].second() == true){
+        for (int i=getPlace(key); i<capacity; i++){
+            if (this.arr[i] == null){
+                this.counter += 1;
                 this.arr[i] = item;
-                added = true;
-                if (this.arr[i] == null){
-                    this.counter += 1;
-                }
+                return;
+            }
+            else if (this.arr[i].second() == true){
+                this.arr[i] = item;
+                return;
             }
         }
     }
 
     public boolean delete(K key) {
         boolean keepSearch = true;
-        for (int i=getPlace(key); i<capacity && keepSearch; i++){
+        for (int i=getPlace(key); i<capacity; i++){
             if (this.arr[i] == null){
-                keepSearch = false;
+                return false;
             }
             else if (!this.arr[i].second() && this.arr[i].first().first() == key){
                 Pair<Pair<K,V>,Boolean> item = new Pair(this.arr[i].first(), true);
