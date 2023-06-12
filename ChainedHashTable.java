@@ -29,20 +29,6 @@ public class ChainedHashTable<K, V> implements HashTable<K, V> {
             arr[i] = new LinkedList<Pair<K, V>>();
         }
     }
-
-    private void reHash(){
-        this.k += 1;
-        this.capacity = this.capacity << 1;
-        ChainedHashTable<K,V> newHashTable = new ChainedHashTable(hashFactory, this.k, maxLoadFactor);
-        // Rehash elements from the existing array to the new array
-        for (int i = 0; i < capacity; i++) {
-            for (Pair<K,V> item : arr[i]) {
-                newHashTable.insert(item.first(), item.second());
-            }
-        }
-        this.arr = newHashTable.arr;
-        this.hashFunc = newHashTable.hashFunc;
-    }
     public V search(K key) {
         int index = getPlace(key);
         for (Pair<K,V> item: arr[index]) {
@@ -84,5 +70,18 @@ public class ChainedHashTable<K, V> implements HashTable<K, V> {
         if(counter/(double)capacity >= maxLoadFactor){
             this.reHash();
         }
+    }
+    private void reHash(){
+        this.k += 1;
+        ChainedHashTable<K,V> newHashTable = new ChainedHashTable(hashFactory, this.k, maxLoadFactor);
+        // Rehash elements from the existing array to the new array
+        for (int i = 0; i < capacity; i++) {
+            for (Pair<K,V> item : arr[i]) {
+                newHashTable.insert(item.first(), item.second());
+            }
+        }
+        this.capacity = this.capacity << 1;
+        this.arr = newHashTable.arr;
+        this.hashFunc = newHashTable.hashFunc;
     }
 }

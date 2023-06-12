@@ -3,9 +3,7 @@ import java.util.Random;
 
 public class StringHash implements HashFactory<String> {
 
-    public StringHash() {
-        throw new UnsupportedOperationException("Replace this by your implementation");
-    }
+    public StringHash() {}
 
     @Override
     public HashFunctor<String> pickHash(int k) {

@@ -1,9 +1,7 @@
 import java.util.Random;
 
 public class MultiplicativeShiftingHash implements HashFactory<Long> {
-    public MultiplicativeShiftingHash() {
-        throw new UnsupportedOperationException("Replace this by your implementation");
-    }
+    public MultiplicativeShiftingHash() {}
 
     public HashFunctor<Long> pickHash(int k) {
        return new Functor(k);
