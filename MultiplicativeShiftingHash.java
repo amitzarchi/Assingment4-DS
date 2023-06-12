@@ -5,12 +5,8 @@ public class MultiplicativeShiftingHash implements HashFactory<Long> {
         throw new UnsupportedOperationException("Replace this by your implementation");
     }
 
-    @Override
     public HashFunctor<Long> pickHash(int k) {
-        if (k>30 || k<0){
-            throw new IllegalArgumentException("only for 0<=k< 31");
-        }
-        return new Functor(k);
+       return new Functor(k);
     }
 
     public class Functor implements HashFunctor<Long> {
