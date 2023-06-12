@@ -61,7 +61,6 @@ public class ProbingHashTable<K, V> implements HashTable<K, V> {
     }
 
     public boolean delete(K key) {
-        boolean keepSearch = true;
         for (int i=getPlace(key); i<capacity; i++){
             if (this.arr[i] == null){
                 return false;
@@ -94,7 +93,7 @@ public class ProbingHashTable<K, V> implements HashTable<K, V> {
         // Rehash elements from the existing array to the new array
         for (int i = 0; i < capacity; i++) {
             Pair<Pair<K,V>,Boolean> item = this.arr[i];
-            if(!item.second()) {
+            if(item != null && !item.second()) {
                 newHashTable.insert(item.first().first(), item.first().second());
             }
         }
