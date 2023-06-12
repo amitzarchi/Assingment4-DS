@@ -126,7 +126,8 @@ abstract public class AbstractSkipList {
             next = new ArrayList<>();
             prev = new ArrayList<>();
             this.height = -1;
-            this.key = key;
+            this.key = key; 
+
         }
 
         public Node getPrev(int level) {
@@ -169,5 +170,6 @@ abstract public class AbstractSkipList {
 
         public int height() { return height; }
         public int key() { return key; }
+
     }
 }

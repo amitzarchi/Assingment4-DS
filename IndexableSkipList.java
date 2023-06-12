@@ -19,7 +19,7 @@ public class IndexableSkipList extends AbstractSkipList {
     @Override
     public int generateHeight() {
         int height = 0;
-        while (Math.random() < probability) {
+        while (Math.random() >= probability) {
             height++;
         }
         return height;
